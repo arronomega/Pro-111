@@ -32,31 +32,24 @@ def random_set_of_data(counter):
         dataset.append(value1)
     sp_mean = st.mean(dataset)
     return sp_mean
-def setup():
-    mean_list = []
-    for i in range(0,1000):
-        set_of_means= random_set_of_data(10)
-        mean_list.append(set_of_means)
-    mean = st.mean(mean_list)
-    print("Mean of sampling distribution of Math score :-",mean )
-    print("Mean of population distribution of Math score :-",pop_mean)
-setup()
-def standard_dev():
-    mean_list =[]
-    for i in range(0,1000):
-        set_of_means = random_set_of_data(100)
-        mean_list.append(set_of_means)
-    std_deviation = st.stdev(mean_list)
-    print("Standard deviation of sampling distribution:-",std_deviation)
-standard_dev()
-def show_fig(mean_list):
-    df = mean_list
-    mean = st.mean(df)
-    fig = ff.create_distplot([df],["temp"],show_hist=False)
-    fig.add_trace(go.Scatter(x=[mean,mean],y=[0,1],mode ="lines",name = "MEAN"))
-    fig.show()
-
-
+mean = st.mean(mean_list)
+std_deviation = st.stdev(mean_list)
+first_std_deviation_start, first_std_deviation_end = mean-std_deviation, mean+std_deviation
+second_std_deviation_start, second_std_deviation_end = mean-(2*std_deviation), mean+(2*std_deviation)
+third_std_deviation_start, third_std_deviation_end = mean-(3*std_deviation), mean+(3*std_deviation)
+df = pd.read_csv("medium_data.csv")
+data = df["claps"].tolist()
+mean_of_sample1 = statistics.mean(data)
+print("Mean of sample1:- ",mean_of_sample1)
+fig = ff.create_distplot([mean_list], ["student marks"], show_hist=False)
+fig.add_trace(go.Scatter(x=[mean, mean], y=[0, 0.17], mode="lines", name="MEAN"))
+fig.add_trace(go.Scatter(x=[mean_of_sample1, mean_of_sample1], y=[0, 0.17], mode="lines", name="MEAN OF STUDENTS WHO HAD MATH LABS"))
+fig.add_trace(go.Scatter(x=[first_std_deviation_end, first_std_deviation_end], y=[0, 0.17], mode="lines", name="STANDARD DEVIATION 1 END"))
+fig.add_trace(go.Scatter(x=[second_std_deviation_end, second_std_deviation_end], y=[0, 0.17], mode="lines", name="STANDARD DEVIATION 2 END"))
+fig.add_trace(go.Scatter(x=[third_std_deviation_end, third_std_deviation_end], y=[0, 0.17], mode="lines", name="STANDARD DEVIATION 3 END"))
+fig.show()
+z_score = (mean - mean_of_sample1)/std_deviation
+print("The z score is = ",z_score)
 
 
 
